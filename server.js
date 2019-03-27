@@ -45,7 +45,7 @@ mongoose.connect(MONGODB_URL, { useNewUrlParser: true } , function(error) {
 });
 // Handlebars
 
-app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.engine("handlebars", exphbs({ defaultLayout: "/views/layouts/main" }));
 app.set("view engine", "handlebars");
 
 
