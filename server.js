@@ -52,7 +52,7 @@ app.set("view engine", "handlebars");
 // Routes
 // GET request to render Handlebars
 app.get("/", function(req, res) {
-  db.Article.find({"saved": false}, function(err, data) {
+  db.Article.find({saved: false}, function(err, data) {
     var hbsObject = {
       article: data
     };
@@ -61,7 +61,7 @@ app.get("/", function(req, res) {
 });
 
 app.get("/saved", function(req, res) {
-  db.Article.find({"saved": true}, function(err, articles) {
+  db.Article.find({saved: true}, function(err, articles) {
     var hbsObject = {
       article: articles
     };
@@ -154,6 +154,37 @@ app.post("/articles/:id", function(req, res) {
       res.json(err);
     });
 });
+
+// Delete an article
+app.post("/articles/delete/:id" ,function (req, res) {
+  db.Article.findByIdAndUpdate({ _id: req.params.id }, { note: []}, {saved: false })
+  .then(function(dbArticle) {
+    res.json(dbArticle);
+  })
+  .catch(function(err) {
+    res.json(err);
+  });
+});
+
+// Delete a note
+app.delete("/note/delete/:note_id/:article_id", function(req, res) {
+  Note.findOneAndRemove({_id: req.params.note_id})
+    .then(function(dbNote) {
+      res.json(dbNote);
+    })
+    .catch(function(err) {
+      res.json(err);
+      Article.findOneAndUpdate({_id: req.params.article_id}, {$pull: {note: req.params.note_id}})
+        .then(function(err) {
+          res.json(dbArticle);
+        })
+        .catch(function(err) {
+          res.json(err);
+        })
+    });
+  });
+
+
 
 // Start the server
 app.listen(PORT, function() {
