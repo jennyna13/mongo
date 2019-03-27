@@ -63,7 +63,7 @@ app.get("/", function(req, res) {
 
 
 app.get("/saved", function(req, res) {
-  db.Article.find({"saved": true})
+  db.Article.find({})
   .populate("note")
   .then(function(dbArticle) {
     res.json(dbArticle);
