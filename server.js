@@ -108,7 +108,7 @@ app.get("/scrape", function(req, res) {
 // Route for getting all Articles from the db
 app.get("/articles", function(req, res) {
   // Grab every document in the Articles collection
-  Article.find({})
+  db.Article.find({})
     .then(function(dbArticle) {
       // If we were able to successfully find Articles, send them back to the client
       res.json(dbArticle);
@@ -122,7 +122,7 @@ app.get("/articles", function(req, res) {
 // Route for grabbing a specific Article by id, populate it with it's note
 app.get("/articles/:id", function(req, res) {
   // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
-  Article.findOne({ _id: req.params.id })
+  db.Article.findOne({ _id: req.params.id })
     // ..and populate all of the notes associated with it
     .populate("note")
     .then(function(dbArticle) {
