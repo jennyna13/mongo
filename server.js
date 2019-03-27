@@ -52,24 +52,20 @@ app.set("view engine", "handlebars");
 // Routes
 // GET request to render Handlebars
 app.get("/", function(req, res) {
-  db.Article.find({})
-    .then(function(dbArticle) {
-      res.json(dbArticle);
-    })
-    .catch(function(err) {
-      res.json(err);
-    });
+  db.Article.find({"saved": false}, function(err, data) {
+    var hbsObject = {
+      article: data
+    };
+    res.render("home", hbsObject);
   });
-
+});
 
 app.get("/saved", function(req, res) {
-  db.Article.find({})
-  .populate("note")
-  .then(function(dbArticle) {
-    res.json(dbArticle);
-  })
-  .catch(function(err) {
-    res.json(err);
+  db.Article.find({saved: true}, function(err, articles) {
+    var hbsObject = {
+      article: articles
+    };
+    res.render("saved", hbsObject);
   });
 });
 
