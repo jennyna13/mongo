@@ -5,7 +5,7 @@
             <div class="col-12 col-lg-12">
                 
                 <!-- Gazette Welcome Post -->
-
+            
                 <div class="gazette-todays-post section_padding_100_50">
                     <div class="gazette-heading">
                         <h4>Articles</h4>
@@ -14,15 +14,15 @@
                 {{#each article}}
                     <div class="gazette-single-todays-post d-md-flex align-items-start mb-50">
                         <div class="todays-post-thumb">
-                            <img src="{{this.image}}" alt="">
+                            <img src="{{result.image}}" alt="">
                         </div>
                         <div class="todays-post-content">
                             <!-- Post Tag -->
                             <div class="gazette-post-tag">
-                                <button type="button" class="save" data-id={{this._id}}>Save</button>
+                                <button type="button" class="save" data-id={{result._id}}>Save</button>
                             </div>
-                            <h3><a href="{{this.link}}" class="font-pt mb-2" target="_blank">{{this.title}}</a></h3>
-                            <p>{{this.summary}}</p>
+                            <h3><a href="{{result.link}}" class="font-pt mb-2" target="_blank">{{result.title}}</a></h3>
+                            <p>{{result.summary}}</p>
                         </div>
                     </div>
                 {{/each}}
