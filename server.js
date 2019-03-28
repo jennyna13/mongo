@@ -31,7 +31,7 @@ app.use(express.json());
 app.use(express.static("public"));
 
 // Connect to the Mongo DB
-var MONGODB_URL = process.env.MONGODB_URL || "mongodb://ds017195.mlab.com:17195/heroku_t6d6h2cm";
+const MONGODB_URL = "mongodb://jennyna:mongoscrape1@ds017195.mlab.com:17195/heroku_t6d6h2cm";
 
 mongoose.connect(MONGODB_URL, { useNewUrlParser: true } , function(error) {
  
@@ -52,16 +52,17 @@ app.set("view engine", "handlebars");
 // Routes
 // GET request to render Handlebars
 app.get("/", function(req, res) {
-  db.Article.find({"saved": false}, function(err, data) {
+  db.Article.find({"saved": false}, function(error, data) {
     var hbsObject = {
       article: data
     };
+    console.log(hbsObject);
     res.render("home", hbsObject);
   });
 });
 
 app.get("/saved", function(req, res) {
-  db.Article.find({saved: true}, function(err, articles) {
+  db.Article.find({"saved": true}).populate("note").exec(function(error, articles) {
     var hbsObject = {
       article: articles
     };
@@ -72,20 +73,21 @@ app.get("/saved", function(req, res) {
 // A GET route for scraping the echoJS website
 app.get("/scrape", function(req, res) {
   // First, we grab the body of the html with axios
-  axios.get("https://www.nytimes.com/section/world/").then(function(response) {
+  axios.get("https://www.nytimes.com/section/world").then(function(response) {
     // Then, we load that into cheerio and save it to $ for a shorthand selector
     var $ = cheerio.load(response.data);
-
+    
     // Now, we grab every h2 within an article tag, and do the following:
-    $("article").each(function(i, element) {
+    $("#stream-panel .css-ye6x8s").each(function(i, element) {
       // Save an empty result object
       var result = {};
 
       // Add the text and href of every link, and save them as properties of the result object
-      result.title = $(this).children("h2").text();
-      result.link = $(this).children("a").attr("href");
-      result.image = $(this).children("img").attr("src");
-      result.summary = $(this).children("p").text();
+      result.title = $(this).find("h2").text();
+      result.link = $(this).find("a").attr("href");
+      result.image = $(this).find("img").attr("src");
+      result.summary = $(this).find("p").text();
+      console.log(result);
 
 
       // Create a new Article using the `result` object built from scraping
