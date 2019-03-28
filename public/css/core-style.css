@@ -819,6 +819,7 @@ img {
     margin-bottom: 15px;
     float: right;
     display: inline-block;
+    cursor: pointer;
 }
 
 .gazette-welcome-post h2 {
